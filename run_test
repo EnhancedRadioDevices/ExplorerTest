@@ -24,6 +24,8 @@ apt-get install build-essential python-pip python-dev python-imaging python-smbu
 prereq=0
 fi
 echo "**INSTALLING SPI_SERIAL"
+
+if [[ $(python -c "import mraa") == 0 ]]; then
 git clone https://github.com/intel-iot-devkit/mraa.git libs/mraa
 cd libs/mraa
 mkdir build
@@ -31,6 +33,12 @@ cd build
 cmake ..
 make
 make install
+cd $here
+fi
+
+git clone https://github.com/EnhancedRadioDevices/spi_serial.git libs/spi_serial
+cd libs/spi_serial
+python setup.py install
 cd $here
 fi
 reset_spi_serial.py
