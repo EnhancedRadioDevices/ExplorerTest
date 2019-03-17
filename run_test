@@ -1,24 +1,39 @@
 #!/bin/bash
 
 here=$(pwd)
+prerep=1
 
 # if RPi
 # need spi_serial, PIL, Adafruit_GPIO, Adafruit SSD1306
 
 
 # get spi_serial and install
+if [[ $(python -c "import spi_serial") == 0 ]]; then
+if [[ $prereq ]]; then
+apt-get update
+apt-get install build-essential python-pip python-dev python-imaging python-smbus git
+prereq=0
+fi
 echo "**INSTALLING SPI_SERIAL"
-
+git clone https://github.com/intel-iot-devkit/mraa.git libs/mraa
+cd libs/mraa
+mkdir build
+cd build
+cmake ..
+make
+make install
+cd $here
+fi
 reset_spi_serial.py
 
 
-
-
+# get Adafruit_GPIO
+if [[ $(python -c "import Adafruit_GPIO") == 0 ]]; then
+if [[ $prereq ]]; then
 apt-get update
 apt-get install build-essential python-pip python-dev python-imaging python-smbus git
-
-# get Adafruit_GPIO
-if $(python -c "import Adafruit_GPIO"
+prereq=0
+fi
 echo "**INSTALLING ADAFRUIT_GPIO"
 git clone https://github.com/adafruit/Adafruit_Python_GPIO.git libs/Adafruit_Python_GPIO 
 cd libs/Adafruit_Python_GPIO
@@ -26,17 +41,27 @@ python setup.py install
 cd $here
 fi
 
-# get PIL and install
-echo "**INSTALLING PIL"
-pip install pillow
 
 # get Adafruit_SSD1306
+if [[ $(python -c "import Adafruit_SSD1306") == 0 ]]; then
+if [[ $prereq ]]; then
+apt-get update
+apt-get install build-essential python-pip python-dev python-imaging python-smbus git
+prereq=0
+fi
 echo "**INSTALLING RPi.GPIO"
 pip install RPi.GPIO
 git clone https://github.com/adafruit/Adafruit_Python_SSD1306.git libs/Adafruit_Python_SSD1306
 cd libs/Adafruit_Python_SSD1306
 python setup.py install
 cd $here
+
+
+# get PIL and install
+echo "**INSTALLING PIL"
+pip install pillow
+
+fi
 
 # run shapes
 echo "**RUNNING shapes.py"
