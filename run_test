@@ -3,8 +3,17 @@
 here=$(pwd)
 prerep=1
 
+
+
 # if RPi
 # need spi_serial, PIL, Adafruit_GPIO, Adafruit SSD1306
+
+echo "**CHECKING HAT EEPROM"
+echo "You should see 'Enhanced Radio Devices' on the next line."
+cat /proc/device-tree/hat/vendor
+echo
+echo "You should see the name of the hat on the next line."
+cat /proc/device-tree/hat/product
 
 
 # get spi_serial and install
