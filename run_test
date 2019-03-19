@@ -1,7 +1,7 @@
 #!/bin/bash
 
 here=$(pwd)
-prerep=1
+prereq=1
 
 
 
@@ -14,18 +14,18 @@ cat /proc/device-tree/hat/vendor
 echo
 echo "You should see the name of the hat on the next line."
 cat /proc/device-tree/hat/product
-
+echo
 
 # get spi_serial and install
-if [[ $(python -c "import spi_serial") == 0 ]]; then
+if ! $(python -c "import spi_serial"); then
+echo "**INSTALLING SPI_SERIAL"
 if [[ $prereq ]]; then
 apt-get update
 apt-get install build-essential python-pip python-dev python-imaging python-smbus git
 prereq=0
 fi
-echo "**INSTALLING SPI_SERIAL"
 
-if [[ $(python -c "import mraa") == 0 ]]; then
+if ! $(python -c "import mraa"); then
 git clone https://github.com/intel-iot-devkit/mraa.git libs/mraa
 cd libs/mraa
 mkdir build
@@ -45,7 +45,7 @@ reset_spi_serial.py
 
 
 # get Adafruit_GPIO
-if [[ $(python -c "import Adafruit_GPIO") == 0 ]]; then
+if ! $(python -c "import Adafruit_GPIO"); then
 if [[ $prereq ]]; then
 apt-get update
 apt-get install build-essential python-pip python-dev python-imaging python-smbus git
@@ -60,7 +60,7 @@ fi
 
 
 # get Adafruit_SSD1306
-if [[ $(python -c "import Adafruit_SSD1306") == 0 ]]; then
+if ! $(python -c "import Adafruit_SSD1306"); then
 if [[ $prereq ]]; then
 apt-get update
 apt-get install build-essential python-pip python-dev python-imaging python-smbus git
